@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A. K. M. Rubyat Hasan Apu - Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CORE VARIABLES & RESET --- */
+        :root {
+            --primary-color: #007AFF; /* Apple Blue */
+            --secondary-color: #2c3e50;
+            --dock-bg: rgba(255, 255, 255, 0.2); /* Frosted Glass */
+            --dock-border: rgba(255, 255, 255, 0.3);
+            --accent-blue: #4a90e2;
+            --accent-red: #ff3b30;
+            --accent-yellow: #ffcc00;
+            --accent-purple: #af52de;
+            --text-dark: #1d1d1f;
+            --text-light: #86868b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            background-color: #fff;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- ANIMATIONS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- APPLE GLASS DOCK NAVIGATION --- */
+        .floating-nav {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center icons */
+            gap: 20px; /* Spacing between icons */
+            z-index: 1000;
+            padding: 20px 15px;
+            background: rgba(245, 245, 247, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 55px;
+            width: 55px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            color: #555;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s, box-shadow 0.3s, color 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            transform: scale(1.3);
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3);
+            z-index: 10;
+        }
+
+        .nav-icon { font-size: 1.3rem; }
+
+        .nav-text {
+            position: absolute;
+            left: 70px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        
+        .nav-text::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 5px 5px 5px 0;
+            border-style: solid;
+            border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+        }
+
+        .nav-item:hover .nav-text { opacity: 1; transform: translateX(0); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            width: 100%;
+            background: #fff;
+            padding-left: 120px; /* Space for dock */
+        }
+
+        .section {
+            padding: 5rem 5%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* --- HOME SECTION --- */
+        .home-section {
+            background: url('bg.jpg') no-repeat center center/cover;
+            position: relative;
+            flex-direction: row; 
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            padding-right: 8%;
+        }
+        .home-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            z-index: 0;
+        }
+        
+        .home-content {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .home-title {
+            font-size: clamp(2rem, 2.7vw, 3.7rem); 
+            font-weight: 900;
+            color: #1d1d1f;
+            line-height: 1.5;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .greeting-part { font-weight: 300; color: #555; }
+
+        /* --- TYPING ANIMATION STYLES --- */
+        .typing-container {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #555;
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            height: 40px; /* Reserve height to prevent jumping */
+        }
+        
+        .dynamic-text {
+            font-family:'Special Elite', cursive;
+            color: #333; /* Lite Black / Dark Gray */
+            font-weight: 450;
+            position: relative;
+            letter-spacing: 1px;
+            font-size: 25px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 2rem;
+            background-color: var(--primary-color);
+            animation: blink 0.8s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .btn-download {
+            margin-top: 2rem;
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid #000;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.85rem;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+        .btn-download:hover {
+            background: #000;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* --- HOME IMAGE --- */
+        .home-img-container { position: relative; z-index: 1; flex: 0 0 auto; }
+        .home-img-wrapper {
+            position: relative;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            z-index: 1;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .home-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%; 
+            position: relative;
+            z-index: 2;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .home-blur-bg {
+            position: absolute;
+            inset: -20px;
+            background-image: url('profile.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(60px);
+            opacity: 0.6; 
+            z-index: 0;
+            border-radius: 50%;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .home-img-wrapper:hover .home-blur-bg { opacity: 0.8; transform: scale(1.1); }
+        .home-img-wrapper:hover img { transform: scale(1.02); }
+
+        /* --- GENERAL STYLES --- */
+        .section-header { margin-bottom: 4rem; }
+        .section-subtitle { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; }
+        .section-title { font-size: 2.2rem; font-weight: 800; color: var(--text-dark); position: relative; display: inline-block; }
+
+        /* --- ABOUT & GRID --- */
+        .about-content-split { display: flex; align-items: center; gap: 4rem; margin-bottom: 4rem; }
+        .about-text-col { flex: 1; }
+        .about-text-col p { font-size: 1.05rem; line-height: 1.8; color: #555; text-align: justify; margin-bottom: 1.5rem; }
+        .about-img-col { flex: 1; display: flex; justify-content: center; }
+        .about-img-wrapper { position: relative; width: 100%; max-width: 450px; border-radius: 20px; }
+        .about-img-wrapper img { width: 100%; height: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s; }
+        .about-img-wrapper:hover img { transform: scale(1.02); }
+
+        /* --- COLOR GRID RESTORED --- */
+        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; }
+        .focus-card { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #f0f0f0; border-bottom: 4px solid transparent; }
+        .focus-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); }
+        .focus-card.blue { border-bottom-color: var(--accent-blue); } .focus-icon.blue { color: var(--accent-blue); }
+        .focus-card.red { border-bottom-color: var(--accent-red); } .focus-icon.red { color: var(--accent-red); }
+        .focus-card.yellow { border-bottom-color: var(--accent-yellow); } .focus-icon.yellow { color: var(--accent-yellow); }
+        .focus-card.purple { border-bottom-color: var(--accent-purple); } .focus-icon.purple { color: var(--accent-purple); }
+        .focus-icon { font-size: 2rem; margin-bottom: 1.5rem; display: inline-block; }
+        .focus-card h3 { font-size: 1.1rem; margin-bottom: 0.8rem; font-weight: 700; color: #333; }
+        .focus-card p { font-size: 0.9rem; color: #777; line-height: 1.6; text-align: justify; }
+
+        .hire-banner { margin-top: 4rem; background: var(--accent-yellow); border-radius: 20px; padding: 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; box-shadow: 0 10px 30px rgba(255, 204, 0, 0.15); }
+        .hire-banner h2 { font-family: 'Times New Roman', serif; font-size: 2rem; font-weight: 400; color: #000; }
+        .btn-hire { padding: 0.8rem 2rem; background: #000; color: #fff; text-transform: uppercase; font-weight: 600; border-radius: 30px; transition: 0.3s; }
+        .btn-hire:hover { background: #333; transform: scale(1.05); color: #fff; }
+
+        /* --- SKILLS & TIMELINE --- */
+        .skills-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .skill-item { margin-bottom: 1.8rem; }
+        .skill-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        .progress-bar { width: 100%; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .progress { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+        .timeline-item { padding: 2rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid var(--accent-blue); transition: transform 0.2s; }
+        .timeline-item:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.05); transform: translateX(5px); }
+        .timeline-header { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 0.5rem; }
+        .timeline-role { font-size: 1.1rem; font-weight: 700; color: #222; }
+        .timeline-date { font-size: 0.85rem; font-weight: 600; color: #999; }
+        .timeline-place { font-size: 0.95rem; color: var(--accent-blue); font-weight: 500; margin-bottom: 1rem; display: block; }
+        .timeline-desc { font-size: 0.95rem; color: #666; line-height: 1.6; text-align: justify; }
+
+        .achievement-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .achieve-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 2rem; text-align: center; transition: 0.3s; }
+        .achieve-card:hover { border-color: var(--accent-yellow); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .achieve-icon { font-size: 2.5rem; color: var(--accent-yellow); margin-bottom: 1rem; }
+
+        /* --- REVIEWS & CONTACT --- */
+        .reviews-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem; }
+        .review-card { background: #fafafa; padding: 2rem; border-radius: 12px; border: 1px solid #eee; }
+        .review-stars { color: var(--accent-yellow); margin-bottom: 1rem; }
+        .review-form-box { max-width: 600px; margin: 0 auto; background: #f4f4f4; padding: 2rem; border-radius: 12px; }
+        .form-control { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px; font-family: 'Montserrat', sans-serif; }
+        .btn-submit { background: #222; color: #fff; border: none; padding: 1rem 2rem; font-weight: 600; text-transform: uppercase; cursor: pointer; width: 100%; border-radius: 8px; }
+
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; text-align: left; max-width: 900px; margin: 0 auto 4rem auto; }
+        .contact-item { display: flex; align-items: center; gap: 1.5rem; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .contact-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); }
+        .icon-box { width: 50px; height: 50px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; flex-shrink: 0; }
+        .contact-info h4 { color: #fff; margin-bottom: 0.3rem; font-size: 1.1rem; }
+        .contact-info p, .contact-info a { color: #ccc; font-size: 0.95rem; }
+
+        /* --- WIDGETS --- */
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background-color: #25d366; color: #fff; border-radius: 50%; text-align: center; font-size: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        .chat-toggle { position: fixed; bottom: 100px; right: 30px; width: 60px; height: 60px; background-color: var(--primary-color); color: #fff; border-radius: 50%; border: none; font-size: 24px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; }
+        .chat-toggle:hover { transform: scale(1.1); }
+        .chat-widget { position: fixed; bottom: 170px; right: 30px; width: 350px; height: 450px; background: #fff; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 1001; display: flex; flex-direction: column; overflow: hidden; transform: scale(0); transform-origin: bottom right; transition: transform 0.3s ease; border: 1px solid #eee; }
+        .chat-widget.open { transform: scale(1); }
+        .chat-header { background: var(--primary-color); color: #fff; padding: 1rem; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .close-chat { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+        .chat-body { flex: 1; padding: 1rem; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 0.8rem; }
+        .chat-msg { max-width: 80%; padding: 0.8rem; border-radius: 8px; font-size: 0.9rem; line-height: 1.4; }
+        .chat-msg.bot { background: #fff; border: 1px solid #eee; align-self: flex-start; color: #333; border-bottom-left-radius: 0; }
+        .chat-msg.user { background: var(--primary-color); color: #fff; align-self: flex-end; border-bottom-right-radius: 0; }
+        .chat-footer { padding: 0.8rem; background: #fff; border-top: 1px solid #eee; display: flex; gap: 0.5rem; }
+        .chat-footer input { flex: 1; padding: 0.6rem; border: 1px solid #ddd; border-radius: 4px; outline: none; }
+        .chat-footer button { background: var(--primary-color); color: #fff; border: none; padding: 0 1rem; border-radius: 4px; cursor: pointer; }
+
+        /* RESPONSIVE */
+        @media (max-width: 968px) {
+            .main-content { padding-left: 0; }
+            .floating-nav {
+                left: 50%; bottom: 20px; top: auto; transform: translateX(-50%);
+                flex-direction: row; width: auto; padding: 10px 20px; 
+                background: rgba(255,255,255,0.85); border-radius: 30px;
+            }
+            .nav-item { width: 45px; height: 45px; font-size: 1rem; }
+            .nav-text { display: none; }
+            
+            /* Home Section Mobile */
+            .home-section { flex-direction: column-reverse; text-align: center; padding-top: 6rem; gap: 2rem; padding-right: 5%; }
+            .home-img-wrapper { width: 280px; height: 280px; }
+            .home-title { font-size: 1.8rem; justify-content: center; white-space: normal; } 
+            .typing-container { justify-content: center; font-size: 1.4rem; }
+
+            .section { padding: 4rem 2rem 8rem 2rem; }
+            .about-content-split { flex-direction: column; text-align: center; }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="floating-nav">
+        <a href="#home" class="nav-item" title="Home">
+            <div class="nav-icon"><i class="fa-solid fa-house"></i></div>
+            <span class="nav-text">Home</span>
+        </a>
+        <a href="#about" class="nav-item" title="About Me">
+            <div class="nav-icon"><i class="fa-regular fa-user"></i></div>
+            <span class="nav-text">About Me</span>
+        </a>
+        <a href="#skills" class="nav-item" title="Skills">
+            <div class="nav-icon"><i class="fa-solid fa-code"></i></div>
+            <span class="nav-text">Skills</span>
+        </a>
+        <a href="#experience" class="nav-item" title="Experience">
+            <div class="nav-icon"><i class="fa-solid fa-briefcase"></i></div>
+            <span class="nav-text">Experience</span>
+        </a>
+        <a href="#education" class="nav-item" title="Education">
+            <div class="nav-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <span class="nav-text">Education</span>
+        </a>
+        <a href="#achievements" class="nav-item" title="Awards">
+            <div class="nav-icon"><i class="fa-solid fa-trophy"></i></div>
+            <span class="nav-text">Awards</span>
+        </a>
+        <a href="#reviews" class="nav-item" title="Reviews">
+            <div class="nav-icon"><i class="fa-regular fa-star"></i></div>
+            <span class="nav-text">Reviews</span>
+        </a>
+        <a href="#contact" class="nav-item" title="Contact">
+            <div class="nav-icon"><i class="fa-regular fa-envelope"></i></div>
+            <span class="nav-text">Contact</span>
+        </a>
+        
+        <div class="nav-item" style="cursor: default;">
+            <div class="nav-icon"><i class="fa-regular fa-eye"></i></div>
+            <span class="nav-text"><span id="visitorCount">120</span> Views</span>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        
+        <section id="home" class="section home-section">
+            <div class="home-content reveal">
+                <h1>
+                    <span class="greeting-part">Hello, I'm</span><br> </h><h1  class="home-title">A. K. M. Rubyat Hasan Apu
+                </h1>
+
+                <div class="typing-container">
+                    
+                    <span class="dynamic-text" id="typing-text"></span>
+                    <span class="cursor"></span>
+                </div>
+
+                <a href="mycv.pdf" class="btn-download">Download CV <i class="fa-solid fa-download"></i></a>
+            </div>
+
+            <div class="home-img-container reveal">
+                <div class="home-img-wrapper">
+                    <div class="home-blur-bg"></div>
+                    <img src="profile.png" alt="Rubyat Hasan" onerror="this.src='https://via.placeholder.com/500x500?text=Profile';">
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="section-header reveal">
+                <h2 class="section-title">About Me</h2>
+            </div>
+            <div class="about-content-split reveal">
+                <div class="about-text-col">
+                    <p>
+                        I am a dedicated <strong>Civil Engineer</strong> with a profound passion for structural integrity and sustainable urban development. 
+                        My professional journey is defined by a commitment to bridging the gap between theoretical engineering concepts and 
+                        real-world construction safety. With a strong foundation in <strong>BNBC 2020</strong> standards and advanced computational 
+                        methods, I strive to create structures that are not only aesthetically pleasing but fundamentally safe and enduring.
+                    </p>
+                    <p>
+                        Beyond my engineering pursuits, I am an avid traveler and hiker who finds solace and inspiration in the natural world. 
+                        Exploring diverse landscapes fuels my creativity, while my deep love for animals grounds my perspective on life. 
+                        I believe in a professional philosophy that respects nature, integrating environmental stewardship into every project I undertake.
+                    </p>
+                </div>
+                <div class="about-img-col">
+                    <div class="about-img-wrapper">
+                        <div class="blur-bg"></div>
+                        <img src="about.jpg" alt="Rubyat Hasan" onerror="this.src='https://via.placeholder.com/450x550?text=About+Pic';">
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-grid reveal">
+                <div class="focus-card blue">
+                    <div class="focus-icon blue"><i class="fa-solid fa-building"></i></div>
+                    <h3>Structural Analysis</h3>
+                    <p>Evaluating building stability and seismic performance using ETABS & STAAD Pro.</p>
+                </div>
+                <div class="focus-card red">
+                    <div class="focus-icon red"><i class="fa-solid fa-drafting-compass"></i></div>
+                    <h3>CAD & Detailing</h3>
+                    <p>Creating precise technical drawings with AutoCAD 2025 and Revit.</p>
+                </div>
+                <div class="focus-card yellow">
+                    <div class="focus-icon yellow"><i class="fa-solid fa-code"></i></div>
+                    <h3>Computational Eng.</h3>
+                    <p>Leveraging Python and C++ to automate calculations and workflows.</p>
+                </div>
+                <div class="focus-card purple">
+                    <div class="focus-icon purple"><i class="fa-solid fa-helmet-safety"></i></div>
+                    <h3>Site Supervision</h3>
+                    <p>Ensuring quality control and design compliance through rigorous inspections.</p>
+                </div>
+            </div>
+
+            <div class="hire-banner reveal">
+                <h2>Bridging Structural Analysis with<br>Modern Engineering</h2>
+                <a href="#contact" class="btn-hire">Hire Me</a>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <div class="section-header reveal">
+                <span class="section-subtitle">My Expertise</span>
+                <h2 class="section-title">Technical Skills</h2>
+            </div>
+            <div class="skills-wrapper reveal">
+                <div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>ETABS 2022</span><span>85%</span></div>
+                        <div class="progress-bar"><div class="progress" style="width:85%; background: var(--accent-blue);"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>AutoCAD 2025</span><span>90%</span></div>
+                        <div class="progress-bar"><div class="progress" style="width:90%; background: var(--accent-yellow);"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>Programming (C++, Python)</span><span>70%</span></div>
+                        <div class="progress-bar"><div class="progress" style="width:70%; background: var(--accent-red);"></div></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>STAAD Pro V8i</span><span>80%</span></div>
+                        <div class="progress-bar"><div class="progress" style="width:80%; background: var(--accent-purple);"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>Autodesk Revit</span><span>75%</span></div>
+                        <div class="progress-bar"><div class="progress" style="width:75%; background: #2c3e50;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>Zotero (Research)</span><span>80%</span></div>
+                        <div class="progress-bar"><div class="progress" style="width:80%; background: #27ae60;"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="section" style="background: #fafafa;">
+            <div class="section-header reveal">
+                <span class="section-subtitle">My Career</span>
+                <h2 class="section-title">Professional Experience</h2>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-header">
+                    <span class="timeline-role">Junior Engineer</span>
+                    <span class="timeline-date">October 2024 - August 2025</span>
+                </div>
+                <span class="timeline-place">Thikana Living & Consultant Ltd, Dhaka</span>
+                <div class="timeline-desc">
+                    <ul>
+                        <li>• Assisted in structural analysis of multi-storied buildings using ETABS and STAAD Pro.</li>
+                        <li>• Conducted comprehensive on-site inspections to ensure quality and compliance with design.</li>
+                        <li>• Prepared detailed technical drawings with AutoCAD for various construction projects.</li>
+                        <li>• Contributed to infrastructure project planning and development initiatives.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="section">
+            <div class="section-header reveal">
+                <span class="section-subtitle">My Background</span>
+                <h2 class="section-title">Academic Details</h2>
+            </div>
+            <div class="timeline-item reveal" style="border-left-color: var(--accent-red);">
+                <div class="timeline-header">
+                    <span class="timeline-role">Bachelor of Science in Civil Engineering</span>
+                    <span class="timeline-date">2024</span>
+                </div>
+                <span class="timeline-place">University of Asia Pacific</span>
+                <p class="timeline-desc">Completed comprehensive coursework in structural analysis, design, and management.</p>
+                <span class="timeline-result">CGPA: 3.52 / 4.00</span>
+            </div>
+            <div class="timeline-item reveal" style="border-left-color: var(--accent-yellow);">
+                <div class="timeline-header">
+                    <span class="timeline-role">Higher Secondary Certificate (HSC)</span>
+                    <span class="timeline-date">2019</span>
+                </div>
+                <span class="timeline-place">B C I C College</span>
+                <p class="timeline-desc">Science Group. Developed strong fundamentals in Physics and Mathematics.</p>
+                <span class="timeline-result">GPA: 4.42 / 5.00</span>
+            </div>
+            <div class="timeline-item reveal" style="border-left-color: var(--accent-purple);">
+                <div class="timeline-header">
+                    <span class="timeline-role">Secondary School Certificate (SSC)</span>
+                    <span class="timeline-date">2017</span>
+                </div>
+                <span class="timeline-place">Monipur High School</span>
+                <p class="timeline-desc">Science Group. Achieved academic excellence.</p>
+                <span class="timeline-result">GPA: 5.00 / 5.00</span>
+            </div>
+        </section>
+
+        <section id="achievements" class="section" style="background: #fafafa;">
+            <div class="section-header reveal">
+                <span class="section-subtitle">Recognition</span>
+                <h2 class="section-title">Achievements & Awards</h2>
+            </div>
+            <div class="achievement-grid reveal">
+                <div class="achieve-card">
+                    <div class="achieve-icon"><i class="fa-solid fa-trophy"></i></div>
+                    <h3 class="achieve-title">Vice Chancellor's Award</h3>
+                    <p>Meritorious Student Award for Academic Excellence</p>
+                    <span class="achieve-date">Spring 2020 | Issued Aug 2023</span>
+                </div>
+                <div class="achieve-card">
+                    <div class="achieve-icon"><i class="fa-solid fa-medal"></i></div>
+                    <h3 class="achieve-title">1st Position</h3>
+                    <p>AutoCAD Detailing Competition, CE Structure Club, UAP</p>
+                    <span class="achieve-date">Spring 2021 | Dec 2021</span>
+                </div>
+                <div class="achieve-card">
+                    <div class="achieve-icon"><i class="fa-solid fa-certificate"></i></div>
+                    <h3 class="achieve-title">Supply Chain Analyst</h3>
+                    <p>Certified Supply Chain Analyst (CSCA)</p>
+                    <span class="achieve-date">ISCEA (USA) | 2024</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews" class="section">
+            <div class="section-header reveal">
+                <span class="section-subtitle">What People Say</span>
+                <h2 class="section-title">Testimonials</h2>
+            </div>
+            <div class="reviews-container reveal" id="reviewsContainer">
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Rubyat is a detail-oriented engineer. His structural analysis skills in ETABS are top-notch, and he delivers work with great precision."</p>
+                    <div class="review-author">Md. Shahlan Kabir</div>
+                    <div class="review-role">Senior Structural Engineer</div>
+                </div>
+            </div>
+            <div class="review-form-box reveal">
+                <h3 style="margin-bottom: 1.5rem; text-align: center;">Leave a Review</h3>
+                <form id="reviewForm">
+                    <input type="text" id="reviewerName" class="form-control" placeholder="Your Name" required>
+                    <textarea id="reviewerText" class="form-control" rows="4" placeholder="Write your feedback..." required></textarea>
+                    <select id="reviewerRating" class="form-control">
+                        <option value="5">★★★★★ (Excellent)</option>
+                        <option value="4">★★★★☆ (Good)</option>
+                        <option value="3">★★★☆☆ (Average)</option>
+                    </select>
+                    <button type="submit" class="btn-submit">Submit Review</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="contact" class="section" style="background: #222; color: #fff;">
+            <div class="section-header reveal">
+                <span class="section-subtitle" style="color: #888;">Get In Touch</span>
+                <h2 class="section-title" style="color: #fff;">Contact Me</h2>
+            </div>
+            <div class="contact-grid reveal">
+                <div class="contact-item">
+                    <a href="mailto:rubyat.ce@gmail.com"><div class="icon-box"><i class="fa-solid fa-envelope"></i></div></a>
+                    <div class="contact-info">
+                        <h4>Email</h4>
+                        <a href="mailto:rubyat.ce@gmail.com">rubyat.ce@gmail.com</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <a href="https://wa.me/8801320585717" target="_blank"><div class="icon-box"><i class="fa-brands fa-whatsapp"></i></div></a>
+                    <div class="contact-info">
+                        <h4>Phone</h4>
+                        <p>+880 1320-585717</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <a href="https://www.linkedin.com/in/rubyat-hasan-ce" target="_blank"><div class="icon-box"><i class="fa-brands fa-linkedin-in"></i></div></a>
+                    <div class="contact-info">
+                        <h4>LinkedIn</h4>
+                        <a href="https://www.linkedin.com/in/rubyat-hasan-ce" target="_blank">rubyat-hasan-ce</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Dhaka,+Bangladesh" target="_blank"><div class="icon-box"><i class="fa-solid fa-location-dot"></i></div></a>
+                    <div class="contact-info">
+                        <h4>Location</h4>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Dhaka,+Bangladesh" target="_blank">Dhaka, Bangladesh</a>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal" style="text-align: center; max-width: 600px; margin: 0 auto; color: #888; font-size: 0.9rem; border-top: 1px solid #333; padding-top: 2rem;">
+                <p>© 2025 A. K. M. Rubyat Hasan Apu. All Rights Reserved.</p>
+            </div>
+        </section>
+
+        <a href="https://wa.me/8801320585717" class="whatsapp-float" target="_blank" title="Chat with me on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <button class="chat-toggle" id="chatToggle" title="Ask AI Assistant"><i class="fa-solid fa-robot"></i></button>
+
+        <div class="chat-widget" id="chatWidget">
+            <div class="chat-header">
+                <span><i class="fa-solid fa-robot"></i> Portfolio Assistant</span>
+                <button class="close-chat" id="closeChat">×</button>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="chat-msg bot">👋 Hi! I'm Rubyat's AI assistant. Ask me about his skills, projects, or experience!</div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="chatInput" placeholder="Type your question...">
+                <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- TYPEWRITER EFFECT SCRIPT ---
+        const typingElement = document.getElementById('typing-text');
+        const words = ["Civil Engineer", "Research Enthusiast", "Traveler", "Fitness Enthusiast", "Digital Artist"];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50; // Faster deletion
+            } else {
+                typingElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100; // Normal typing speed
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // Pause at end of word
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                typeSpeed = 500; // Small pause before typing next word
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+        
+        // Start the typing loop
+        document.addEventListener('DOMContentLoaded', type);
+
+
+        // --- CHATBOT LOGIC ---
+        const portfolioData = {
+            name: "A. K. M. Rubyat Hasan Apu",
+            skills: "ETABS, AutoCAD, STAAD Pro, Revit, Python, C++, and Zotero.",
+            experience: "Junior Engineer at Thikana Living & Consultant Ltd (Oct 2024 - Aug 2025).",
+            education: "B.Sc. in Civil Engineering from University of Asia Pacific (CGPA 3.52/4.00).",
+            contact: "Email: rubyat.ce@gmail.com, Phone: +880 1320-585717, Location: Dhaka.",
+            intro: "Rubyat is a Civil Engineer specializing in Structural Analysis & Design."
+        };
+        
+        function getBotResponse(input) {
+            input = input.toLowerCase();
+            if (input.includes("hi") || input.includes("hello")) return "Hello! How can I help you today?";
+            if (input.includes("who") || input.includes("name")) return portfolioData.intro;
+            if (input.includes("skill") || input.includes("software")) return `His technical skills include: ${portfolioData.skills}`;
+            if (input.includes("experience") || input.includes("job") || input.includes("work")) return `He has worked as a ${portfolioData.experience}`;
+            if (input.includes("education") || input.includes("study")) return portfolioData.education;
+            if (input.includes("contact") || input.includes("email") || input.includes("phone")) return `You can reach him via: ${portfolioData.contact}`;
+            return "I can tell you about his skills, experience, education, or contact info.";
+        }
+
+        const chatToggle = document.getElementById('chatToggle');
+        const closeChat = document.getElementById('closeChat');
+        const chatWidget = document.getElementById('chatWidget');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatBody = document.getElementById('chatBody');
+
+        function toggleChat() { chatWidget.classList.toggle('open'); }
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `chat-msg ${sender}`;
+            div.textContent = text;
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function handleUserMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            addMessage(text, 'user');
+            chatInput.value = '';
+            setTimeout(() => { addMessage(getBotResponse(text), 'bot'); }, 500);
+        }
+        if(chatToggle) chatToggle.addEventListener('click', toggleChat);
+        if(closeChat) closeChat.addEventListener('click', toggleChat);
+        if(sendBtn) sendBtn.addEventListener('click', handleUserMessage);
+        if(chatInput) chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserMessage(); });
+
+        // --- REVIEW FORM MOCK ---
+        const reviewForm = document.getElementById('reviewForm');
+        if(reviewForm) {
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert("Thank you! Your review has been submitted.");
+                reviewForm.reset();
+            });
+        }
+
+        // --- SMOOTH SCROLL & NAV ACTIVE STATE ---
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.floating-nav a');
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 300) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // --- REVEAL ANIMATION ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active'); 
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
